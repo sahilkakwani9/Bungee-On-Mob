@@ -11,7 +11,7 @@ import {
   defaultWagmiConfig,
   Web3Modal,
 } from "@web3modal/wagmi-react-native";
-import { projectId } from "./src/utils/secret";
+import { PROJECT_ID } from "./src/utils/secret";
 
 // 2. Create config
 const metadata = {
@@ -27,9 +27,13 @@ const metadata = {
 
 const chains = [mainnet, polygon, arbitrum];
 
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+const wagmiConfig = defaultWagmiConfig({
+  chains,
+  projectId: PROJECT_ID,
+  metadata,
+});
 createWeb3Modal({
-  projectId,
+  projectId: PROJECT_ID,
   chains,
   wagmiConfig,
 });

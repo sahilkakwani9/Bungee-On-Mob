@@ -11,15 +11,14 @@ import {
   defaultWagmiConfig,
   Web3Modal,
 } from "@web3modal/wagmi-react-native";
-
-const projectId = "12f5e16f041d6590f7e885d0af4875cf";
+import { projectId } from "./src/utils/secret";
 
 // 2. Create config
 const metadata = {
   name: "MoBungee",
   description: "Bungee on your phone",
-  url: "https://web3modal.com",
-  icons: ["https://avatars.githubusercontent.com/u/37784886"],
+  url: "https://www.bungee.exchange/",
+  icons: ["https://www.bungee.exchange/"],
   redirect: {
     native: "YOUR_APP_SCHEME://",
     universal: "YOUR_APP_UNIVERSAL_LINK.com",

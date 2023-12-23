@@ -13,15 +13,11 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  WebView: { url: string };
   Login: undefined;
-  Seed: undefined;
-  ImportWallet: undefined;
 };
 
 export type RootTabParamList = {
-  Wallet: undefined;
-  Settings: undefined;
+  Bridge: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =

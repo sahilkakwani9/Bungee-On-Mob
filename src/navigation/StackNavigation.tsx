@@ -3,6 +3,7 @@ import React from "react";
 import { RootStackParamList } from "../types/navigation";
 import BottomTabNavigator from "./BottomTabNavigation";
 import Login from "../screens/Login";
+import Loader from "../screens/Loader";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function StackNavigation() {
@@ -13,7 +14,7 @@ export default function StackNavigation() {
           backgroundColor: "black",
         },
       }}
-      initialRouteName={"Login"}
+      initialRouteName={"Loader"}
     >
       <Stack.Screen
         name="Root"
@@ -27,6 +28,15 @@ export default function StackNavigation() {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{
+          headerShown: false,
+          animation: "default",
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="Loader"
+        component={Loader}
         options={{
           headerShown: false,
           animation: "default",

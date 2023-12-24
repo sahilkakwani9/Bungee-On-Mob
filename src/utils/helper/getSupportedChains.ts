@@ -1,7 +1,8 @@
+import { SupportedChainResult } from "../../types/socket";
 import { SOCKET_API_URL } from "../constants";
 import { SOCKET_API_KEY } from "../secret";
 
-async function getSupportedTokens() {
+async function getSupportedChains(): Promise<SupportedChainResult> {
   try {
     const response = await fetch(`${SOCKET_API_URL}/supported/chains`, {
       method: "GET",
@@ -13,11 +14,11 @@ async function getSupportedTokens() {
 
     if (!response.ok) {
       throw new Error(
-        `Cant fetch supported tokens, HTTP error! Status: ${response.status}`
+        `Cant fetch supported chains, HTTP error! Status: ${response.status}`
       );
     }
 
-    const data = await response.json();
+    const data: SupportedChainResult = await response.json();
 
     return data;
   } catch (error) {
@@ -26,4 +27,4 @@ async function getSupportedTokens() {
   }
 }
 
-export default getSupportedTokens;
+export default getSupportedChains;

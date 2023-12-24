@@ -1,4 +1,5 @@
 import "@walletconnect/react-native-compat";
+import "react-native-gesture-handler";
 import React from "react";
 
 // import MainScreen from './screens/MainScreen';
@@ -12,6 +13,9 @@ import {
   Web3Modal,
 } from "@web3modal/wagmi-react-native";
 import { PROJECT_ID } from "./src/utils/secret";
+import { Dimensions, StatusBar, StyleSheet, View } from "react-native";
+import { PortalProvider } from "@gorhom/portal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // 2. Create config
 const metadata = {
@@ -40,11 +44,24 @@ createWeb3Modal({
 
 export default function App() {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <SafeAreaProvider>
-        <Navigation />
-        <Web3Modal />
-      </SafeAreaProvider>
-    </WagmiConfig>
+    <View style={{ height: Dimensions.get("window").height }}>
+      <GestureHandlerRootView style={styles.container}>
+        <WagmiConfig config={wagmiConfig}>
+          <PortalProvider>
+            <SafeAreaProvider>
+              <StatusBar barStyle={"dark-content"} />
+              <Navigation />
+            </SafeAreaProvider>
+            <Web3Modal />
+          </PortalProvider>
+        </WagmiConfig>
+      </GestureHandlerRootView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

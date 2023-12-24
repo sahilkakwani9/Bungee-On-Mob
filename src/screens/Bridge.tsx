@@ -1,14 +1,26 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useAccount } from "wagmi";
 import colors from "../utils/colors";
 import { useConfigStore } from "../store/ConfigStore";
 import { SvgFromUri } from "react-native-svg";
 import DropDown from "../assets/icons/Dropdown-Filled";
+import SendingChainSheet from "../components/sheets/SendingChainSheet";
+import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import ReceivingChainSheet from "../components/sheets/ReceivingChainSheet";
 
 const Bridge = () => {
   const { address } = useAccount();
   const { receivingChains, sendingChains } = useConfigStore();
+  const sendChainSheetRef = React.useRef<BottomSheetMethods>(null);
+  const receivingChainSheetRef = React.useRef<BottomSheetMethods>(null);
+
+  const openSendingSheet = () => {
+    sendChainSheetRef.current?.snapToIndex(0);
+  };
+  const openReceivingSheet = () => {
+    receivingChainSheetRef.current?.snapToIndex(0);
+  };
 
   return (
     <View style={styles.container}>
@@ -26,7 +38,10 @@ const Bridge = () => {
               }}
             />
           </View>
-          <View style={styles.dropDownContainer}>
+          <TouchableOpacity
+            style={styles.dropDownContainer}
+            onPress={openSendingSheet}
+          >
             <Text style={styles.switchText}>{sendingChains![0].name}</Text>
             <DropDown
               height={25}
@@ -36,7 +51,7 @@ const Bridge = () => {
                 marginTop: 4,
               }}
             />
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.switch}>
           <View style={styles.switchImage}>
@@ -50,7 +65,10 @@ const Bridge = () => {
               }}
             />
           </View>
-          <View style={styles.dropDownContainer}>
+          <TouchableOpacity
+            style={styles.dropDownContainer}
+            onPress={openReceivingSheet}
+          >
             <Text style={styles.switchText}>{receivingChains![0].name}</Text>
             <DropDown
               height={25}
@@ -60,9 +78,14 @@ const Bridge = () => {
                 marginTop: 4,
               }}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
+      <SendingChainSheet data={sendingChains!} sheetRef={sendChainSheetRef} />
+      <ReceivingChainSheet
+        data={receivingChains!}
+        sheetRef={receivingChainSheetRef}
+      />
     </View>
   );
 };

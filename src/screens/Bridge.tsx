@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAccount } from "wagmi";
 import colors from "../utils/colors";
 import { useConfigStore } from "../store/ConfigStore";
@@ -8,10 +8,16 @@ import DropDown from "../assets/icons/Dropdown-Filled";
 import SendingChainSheet from "../components/sheets/SendingChainSheet";
 import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import ReceivingChainSheet from "../components/sheets/ReceivingChainSheet";
+import getFromChainTokens from "../utils/helper/getFromChainTokens";
 
 const Bridge = () => {
   const { address } = useAccount();
-  const { receivingChains, sendingChains } = useConfigStore();
+  const {
+    receivingChains,
+    sendingChains,
+    selectedSendingChain,
+    selectedReceivingChain,
+  } = useConfigStore();
   const sendChainSheetRef = React.useRef<BottomSheetMethods>(null);
   const receivingChainSheetRef = React.useRef<BottomSheetMethods>(null);
 
@@ -22,27 +28,48 @@ const Bridge = () => {
     receivingChainSheetRef.current?.snapToIndex(0);
   };
 
+  useEffect(() => {
+    getFromChainTokens(
+      selectedSendingChain?.chainId!,
+      selectedReceivingChain?.chainId!
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.address}>{address}</Text>
       <View style={styles.switchContainer}>
         <View style={styles.switch}>
           <View style={styles.switchImage}>
-            <SvgFromUri
-              uri={sendingChains![0].icon}
-              width={"100%"}
-              height={"100%"}
-              style={{
-                backgroundColor: "green",
-                borderRadius: 20,
-              }}
-            />
+            {selectedSendingChain!.icon.includes(".svg") ? (
+              <SvgFromUri
+                uri={
+                  selectedSendingChain!.icon
+                    ? selectedSendingChain!.icon
+                    : "https://media.socket.tech/Matic.svg"
+                }
+                width={"100%"}
+                height={"100%"}
+                style={{
+                  borderRadius: 20,
+                }}
+              />
+            ) : (
+              <Image
+                source={{ uri: selectedSendingChain!.icon }}
+                style={{
+                  borderRadius: 20,
+                  height: "90%",
+                  width: "90%",
+                }}
+              />
+            )}
           </View>
           <TouchableOpacity
             style={styles.dropDownContainer}
             onPress={openSendingSheet}
           >
-            <Text style={styles.switchText}>{sendingChains![0].name}</Text>
+            <Text style={styles.switchText}>{selectedSendingChain!.name}</Text>
             <DropDown
               height={25}
               width={25}
@@ -55,21 +82,37 @@ const Bridge = () => {
         </View>
         <View style={styles.switch}>
           <View style={styles.switchImage}>
-            <SvgFromUri
-              uri={receivingChains![0].icon}
-              width={"100%"}
-              height={"100%"}
-              style={{
-                backgroundColor: "green",
-                borderRadius: 20,
-              }}
-            />
+            {selectedReceivingChain!.icon.includes(".svg") ? (
+              <SvgFromUri
+                uri={
+                  selectedReceivingChain!.icon
+                    ? selectedReceivingChain!.icon
+                    : "https://media.socket.tech/Matic.svg"
+                }
+                width={"100%"}
+                height={"100%"}
+                style={{
+                  borderRadius: 20,
+                }}
+              />
+            ) : (
+              <Image
+                source={{ uri: selectedReceivingChain!.icon }}
+                style={{
+                  borderRadius: 20,
+                  height: "90%",
+                  width: "90%",
+                }}
+              />
+            )}
           </View>
           <TouchableOpacity
             style={styles.dropDownContainer}
             onPress={openReceivingSheet}
           >
-            <Text style={styles.switchText}>{receivingChains![0].name}</Text>
+            <Text style={styles.switchText}>
+              {selectedReceivingChain!.name}
+            </Text>
             <DropDown
               height={25}
               width={25}

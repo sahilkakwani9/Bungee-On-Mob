@@ -9,8 +9,13 @@ import { ChainInfo } from "../types/socket";
 
 const Loader = ({ navigation }: RootStackScreenProps<"Loader">) => {
   const { isConnected } = useAccount();
-  const { setSupportedChains, setSendingChains, setReceivingChains } =
-    useConfigStore();
+  const {
+    setSupportedChains,
+    setSendingChains,
+    setReceivingChains,
+    setSelectedReceivingChain,
+    setSelectedSendingChain,
+  } = useConfigStore();
 
   const checkLogin = async () => {
     const supportedChains = await getSupportedChains();
@@ -34,7 +39,9 @@ const Loader = ({ navigation }: RootStackScreenProps<"Loader">) => {
     );
 
     setSendingChains(categorizedChains.sendingEnabledArray);
+    setSelectedSendingChain(categorizedChains.sendingEnabledArray[0]);
     setReceivingChains(categorizedChains.receivingEnabledArray);
+    setSelectedReceivingChain(categorizedChains.receivingEnabledArray[0]);
     if (isConnected) {
       navigation.reset({ index: 0, routes: [{ name: "Root" }] });
       return;

@@ -12,6 +12,7 @@ import { SvgFromUri } from "react-native-svg";
 import { ChainInfo } from "../../types/socket";
 import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import { useConfigStore } from "../../store/ConfigStore";
 
 interface IReceivingChainSheet {
   sheetRef: React.RefObject<BottomSheetMethods>;
@@ -19,9 +20,19 @@ interface IReceivingChainSheet {
 }
 
 const ReceivingChainSheet = ({ sheetRef, data }: IReceivingChainSheet) => {
+  const { setSelectedReceivingChain } = useConfigStore();
+  const selectChain = (chain: ChainInfo) => {
+    setSelectedReceivingChain(chain);
+  };
   const renderItem = ({ item }: { item: ChainInfo }) => {
     return (
-      <View style={styles.itemContainer}>
+      <TouchableOpacity
+        style={styles.itemContainer}
+        onPress={() => {
+          selectChain(item);
+          sheetRef.current?.close();
+        }}
+      >
         <View style={styles.switchImage}>
           {item.icon.includes(".svg") ? (
             <SvgFromUri
@@ -46,7 +57,7 @@ const ReceivingChainSheet = ({ sheetRef, data }: IReceivingChainSheet) => {
           )}
         </View>
         <Text style={styles.text}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
   return (

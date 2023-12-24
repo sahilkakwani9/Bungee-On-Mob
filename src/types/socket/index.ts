@@ -26,4 +26,25 @@ interface SupportedChainResult {
   result: ChainInfo[];
 }
 
-export { type ChainInfo, type SupportedChainResult };
+interface TokenInfo {
+  name: string;
+  address: string;
+  icon: string | null;
+  decimals: number;
+  symbol: string;
+  chainId: number;
+  logoURI: string | null;
+  chainAgnosticId: string | null;
+}
+
+interface TokenResult {
+  success: boolean;
+  result: TokenInfo[];
+}
+
+export {
+  type ChainInfo,
+  type SupportedChainResult,
+  type TokenResult,
+  type TokenInfo,
+};

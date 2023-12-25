@@ -6,6 +6,10 @@ import { RootStackScreenProps } from "../types/navigation";
 import getSupportedChains from "../utils/helper/getSupportedChains";
 import { useConfigStore } from "../store/ConfigStore";
 import { ChainInfo } from "../types/socket";
+import getFromChainTokens from "../utils/helper/getFromChainTokens";
+import getToChainTokens from "../utils/helper/getToChainTokens";
+import { MOST_VALUED_TOKENS } from "../utils/constants";
+import fetchTokenLists from "../utils/helper/fetchTokenLists";
 
 const Loader = ({ navigation }: RootStackScreenProps<"Loader">) => {
   const { isConnected } = useAccount();
@@ -15,6 +19,11 @@ const Loader = ({ navigation }: RootStackScreenProps<"Loader">) => {
     setReceivingChains,
     setSelectedReceivingChain,
     setSelectedSendingChain,
+    setSendingTokens,
+    setReceivingTokens,
+    setSelectedSendingToken,
+    setSelectedReceivingToken,
+    setTokensLoading,
   } = useConfigStore();
 
   const checkLogin = async () => {
@@ -42,6 +51,17 @@ const Loader = ({ navigation }: RootStackScreenProps<"Loader">) => {
     setSelectedSendingChain(categorizedChains.sendingEnabledArray[0]);
     setReceivingChains(categorizedChains.receivingEnabledArray);
     setSelectedReceivingChain(categorizedChains.receivingEnabledArray[0]);
+    await fetchTokenLists(
+      categorizedChains.sendingEnabledArray[0].chainId,
+      categorizedChains.receivingEnabledArray[0].chainId,
+      {
+        setTokensLoading,
+        setSendingTokens,
+        setReceivingTokens,
+        setSelectedSendingToken,
+        setSelectedReceivingToken,
+      }
+    );
     if (isConnected) {
       navigation.reset({ index: 0, routes: [{ name: "Root" }] });
       return;
@@ -50,6 +70,7 @@ const Loader = ({ navigation }: RootStackScreenProps<"Loader">) => {
       return;
     }
   };
+
   React.useEffect(() => {
     checkLogin();
   }, []);

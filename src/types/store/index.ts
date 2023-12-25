@@ -1,13 +1,23 @@
-import { ChainInfo } from "../socket";
+import { ChainInfo, TokenInfo } from "../socket";
 export type IConfigStore = {
   supportedChains: null | ChainInfo[];
   sendingChains: null | ChainInfo[];
   receivingChains: null | ChainInfo[];
   selectedSendingChain: ChainInfo | null;
   selectedReceivingChain: ChainInfo | null;
+  sendingTokens: null | TokenInfo[];
+  receivingTokens: null | TokenInfo[];
+  selectedSendingToken: TokenInfo | null;
+  selectedReceivingToken: TokenInfo | null;
+  tokensLoading: boolean;
   setSupportedChains: (chains: ChainInfo[]) => void;
   setSendingChains: (chains: ChainInfo[]) => void;
   setReceivingChains: (chains: ChainInfo[]) => void;
   setSelectedSendingChain: (chain: ChainInfo) => void;
   setSelectedReceivingChain: (chain: ChainInfo) => void;
+  setSendingTokens: (tokens: TokenInfo[]) => void;
+  setReceivingTokens: (tokens: TokenInfo[]) => void;
+  setSelectedSendingToken: (chain: TokenInfo) => void;
+  setSelectedReceivingToken: (chain: TokenInfo) => void;
+  setTokensLoading: (value: boolean) => void;
 };

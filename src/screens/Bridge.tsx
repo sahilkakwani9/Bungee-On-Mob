@@ -21,6 +21,9 @@ import ReceivingChainSheet from "../components/sheets/ReceivingChainSheet";
 import SendingTokenSheet from "../components/sheets/SendingTokenSheet";
 import ReceivingTokenSheet from "../components/sheets/ReceivingTokenSheet";
 import fetchTokenLists from "../utils/helper/fetchTokenLists";
+import getRoutes from "../utils/helper/getRoutes";
+import { sortCriteria } from "../types/socket";
+import RouteCard from "../components/RouteCard";
 
 const Bridge = () => {
   const { address } = useAccount();
@@ -57,19 +60,32 @@ const Bridge = () => {
     receiveTokenSheetRef.current?.snapToIndex(0);
   };
 
-  React.useEffect(() => {
-    fetchTokenLists(
-      selectedSendingChain?.chainId!,
-      selectedReceivingChain?.chainId!,
-      {
-        setTokensLoading,
-        setSendingTokens,
-        setReceivingTokens,
-        setSelectedSendingToken,
-        setSelectedReceivingToken,
-      }
+  const fetchBrew = async () => {
+    await getRoutes(
+      137,
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      56,
+      "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
+      100000000,
+      "0x3e8cb4bd04d81498ab4b94a392c334f5328b237b",
+      sortCriteria.TIME
     );
-  }, [selectedSendingChain, selectedReceivingChain]);
+  };
+
+  // React.useEffect(() => {
+  //   fetchTokenLists(
+  //     selectedSendingChain?.chainId!,
+  //     selectedReceivingChain?.chainId!,
+  //     {
+  //       setTokensLoading,
+  //       setSendingTokens,
+  //       setReceivingTokens,
+  //       setSelectedSendingToken,
+  //       setSelectedReceivingToken,
+  //     }
+  //   );
+  //   fetchBrew();
+  // }, [selectedSendingChain, selectedReceivingChain]);
 
   return (
     <View style={styles.container}>
@@ -250,6 +266,9 @@ const Bridge = () => {
           )}
         </View>
       </View>
+      <View style={styles.routesContainer}>
+        <RouteCard />
+      </View>
       <SendingChainSheet data={sendingChains!} sheetRef={sendChainSheetRef} />
       <ReceivingChainSheet
         data={receivingChains!}
@@ -318,5 +337,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 4,
+  },
+  routesContainer: {
+    flex: 1,
+    paddingHorizontal: 12,
   },
 });

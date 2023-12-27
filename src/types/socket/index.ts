@@ -42,9 +42,16 @@ interface TokenResult {
   result: TokenInfo[];
 }
 
+enum sortCriteria {
+  OUTPUT = "output",
+  TIME = "time",
+  GAS = "gas",
+}
+
 export {
   type ChainInfo,
   type SupportedChainResult,
   type TokenResult,
   type TokenInfo,
+  sortCriteria,
 };

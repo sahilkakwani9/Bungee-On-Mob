@@ -24,8 +24,9 @@ import fetchTokenLists from "../utils/helper/fetchTokenLists";
 import getRoutes from "../utils/helper/getRoutes";
 import { sortCriteria } from "../types/socket";
 import RouteCard from "../components/RouteCard";
+import { RootTabScreenProps } from "../types/navigation";
 
-const Bridge = () => {
+const Bridge = ({ navigation }: RootTabScreenProps<"Bridge">) => {
   const { address } = useAccount();
   const {
     receivingChains,
@@ -47,6 +48,7 @@ const Bridge = () => {
   const receivingChainSheetRef = React.useRef<BottomSheetMethods>(null);
   const sendTokenSheetRef = React.useRef<BottomSheetMethods>(null);
   const receiveTokenSheetRef = React.useRef<BottomSheetMethods>(null);
+  const [routesLoading, setRoutesLoading] = React.useState(false);
   const openSendingSheet = () => {
     sendChainSheetRef.current?.snapToIndex(0);
   };
@@ -60,32 +62,36 @@ const Bridge = () => {
     receiveTokenSheetRef.current?.snapToIndex(0);
   };
 
-  const fetchBrew = async () => {
-    await getRoutes(
-      137,
-      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
-      56,
-      "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
-      100000000,
-      "0x3e8cb4bd04d81498ab4b94a392c334f5328b237b",
-      sortCriteria.TIME
-    );
+  const onPressRoutes = async () => {
+    try {
+      setRoutesLoading(true);
+      const routes = await getRoutes(
+        selectedSendingChain?.chainId!,
+        selectedSendingToken?.address!,
+        selectedReceivingChain?.chainId!,
+        selectedReceivingToken?.address!,
+        "1000000000000000000",
+        address!,
+        sortCriteria.OUTPUT
+      );
+      setRoutesLoading(false);
+      navigation.navigate("Routes", { routes });
+    } catch (error) {}
   };
 
-  // React.useEffect(() => {
-  //   fetchTokenLists(
-  //     selectedSendingChain?.chainId!,
-  //     selectedReceivingChain?.chainId!,
-  //     {
-  //       setTokensLoading,
-  //       setSendingTokens,
-  //       setReceivingTokens,
-  //       setSelectedSendingToken,
-  //       setSelectedReceivingToken,
-  //     }
-  //   );
-  //   fetchBrew();
-  // }, [selectedSendingChain, selectedReceivingChain]);
+  React.useEffect(() => {
+    fetchTokenLists(
+      selectedSendingChain?.chainId!,
+      selectedReceivingChain?.chainId!,
+      {
+        setTokensLoading,
+        setSendingTokens,
+        setReceivingTokens,
+        setSelectedSendingToken,
+        setSelectedReceivingToken,
+      }
+    );
+  }, [selectedSendingChain, selectedReceivingChain]);
 
   return (
     <View style={styles.container}>
@@ -265,10 +271,17 @@ const Bridge = () => {
             </TouchableOpacity>
           )}
         </View>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.routesButton} onPress={onPressRoutes}>
+            {routesLoading ? (
+              <ActivityIndicator size={"large"} />
+            ) : (
+              <Text style={styles.btnText}>Show Routes</Text>
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.routesContainer}>
-        <RouteCard />
-      </View>
+
       <SendingChainSheet data={sendingChains!} sheetRef={sendChainSheetRef} />
       <ReceivingChainSheet
         data={receivingChains!}
@@ -338,8 +351,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
   },
-  routesContainer: {
+  btnContainer: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 40,
+    height: 150,
+    width: "100%",
+  },
+  routesButton: {
+    backgroundColor: colors.pink,
+    width: 300,
     flex: 1,
-    paddingHorizontal: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+  },
+  btnText: {
+    color: colors.background,
+    fontSize: 28,
+    fontWeight: "700",
   },
 });

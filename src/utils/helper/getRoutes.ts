@@ -8,13 +8,13 @@ async function getRoutes(
   fromTokenAddress: string,
   toChainId: number,
   toTokenAddress: string,
-  amount: number,
+  amount: string,
   userAddress: string,
   sortCriteria: sortCriteria
 ): Promise<RouteResponse> {
   try {
     const response = await fetch(
-      `${SOCKET_API_URL}/quote?fromChainId=${fromChainId}&fromTokenAddress=${fromTokenAddress}&toChainId=${toChainId}&toTokenAddress=${toTokenAddress}&fromAmount=${amount}&userAddress=${userAddress}&uniqueRoutesPerBridge=true&sort=${sortCriteria}`,
+      `${SOCKET_API_URL}/quote?fromChainId=${fromChainId}&fromTokenAddress=${fromTokenAddress}&toChainId=${toChainId}&toTokenAddress=${toTokenAddress}&fromAmount=${amount}&userAddress=${userAddress}&uniqueRoutesPerBridge=true&sort=${sortCriteria}&singleTxOnly=true`,
       {
         method: "GET",
         headers: {
@@ -31,7 +31,6 @@ async function getRoutes(
     }
 
     const data: RouteResponse = await response.json();
-    console.log("got the routes", data);
 
     return data;
   } catch (error) {

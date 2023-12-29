@@ -4,6 +4,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RouteResponse } from "../socket/route";
 
 declare global {
   namespace ReactNavigation {
@@ -15,6 +16,9 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Login: undefined;
   Loader: undefined;
+  Routes: {
+    routes: RouteResponse
+  };
 };
 
 export type RootTabParamList = {

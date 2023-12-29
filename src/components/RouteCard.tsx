@@ -1,28 +1,48 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colors from "../utils/colors";
+import formatTime from "../utils/helper/formatTime";
+import { Route, Step } from "../types/socket/route";
 
-const RouteCard = () => {
+const RouteCard = ({ item }: { item: Route }) => {
+  const getBridgeLogo = () => {
+    const bridgeStep = item.userTxs[0].steps?.filter((step) => {
+      return step.type == "bridge";
+    });
+    return bridgeStep[0]?.protocol?.icon;
+  };
+
+  const getReceivedAmount = () => {
+    const receivedAmount =
+      parseInt(item.toAmount) / 10 ** item.userTxs[0].toAsset.decimals;
+    return `${receivedAmount.toFixed(3)} ${item.userTxs[0].toAsset.symbol}`;
+  };
   return (
     <View style={styles.container}>
       <View style={styles.bridgeContainer}>
         <Image
           source={{
-            uri: "https://bridgelogos.s3.ap-south-1.amazonaws.com/hop.png",
+            uri: getBridgeLogo(),
           }}
           style={styles.bridgeIcon}
         />
-        <Text style={styles.bridgeName}>Across</Text>
-        <Text style={styles.bridgeTime}>~ 1 min</Text>
+        <View style={styles.bridgeTxtContainer}>
+          <Text style={styles.bridgeName}>{item.usedBridgeNames[0]}</Text>
+          <Text style={styles.bridgeTime}>
+            {formatTime(item.maxServiceTime)}
+          </Text>
+        </View>
       </View>
       <View style={styles.outputContainer}>
         <View style={styles.seperator}>
           <Text style={styles.constant}>Est. Output</Text>
-          <Text style={styles.output}>9.961 USDC</Text>
+          <Text style={styles.output}>{getReceivedAmount()}</Text>
         </View>
         <View style={styles.seperator}>
           <Text style={styles.constant}>Gas fees</Text>
-          <Text style={styles.output}>$6.07</Text>
+          <Text style={styles.output}>{`$${item.totalGasFeesInUsd.toFixed(
+            2
+          )}`}</Text>
         </View>
       </View>
     </View>
@@ -45,12 +65,18 @@ const styles = StyleSheet.create({
   bridgeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 10,
   },
   bridgeIcon: {
     height: 26,
     width: 26,
     borderRadius: 4,
+  },
+  bridgeTxtContainer: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   bridgeName: {
     fontSize: 20,
@@ -75,13 +101,13 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   constant: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "500",
     color: colors.foreground,
     opacity: 0.7,
   },
   output: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "700",
     color: colors.foreground,
   },

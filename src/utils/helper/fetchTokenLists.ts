@@ -35,12 +35,11 @@ const fetchTokenLists = async (
     const filteredToTokens = toTokens.result.filter((tokenInfo) =>
       MOST_VALUED_TOKENS.includes(tokenInfo.name)
     );
-    setSendingTokens(filteredFromTokens.reverse());
-    setReceivingTokens(filteredToTokens.reverse());
+    setSendingTokens(filteredFromTokens);
+    setReceivingTokens(filteredToTokens);
     setSelectedSendingToken(filteredFromTokens[0]);
     setSelectedReceivingToken(filteredToTokens[0]);
     setTokensLoading(false);
-    console.log(fromTokens.result.length);
   } catch (error) {
     throw new Error(`Cant fetch supported tokens, error: ${error}`);
   }

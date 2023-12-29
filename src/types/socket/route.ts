@@ -1,13 +1,4 @@
-interface TokenInfo {
-  chainId: number;
-  address: string;
-  symbol: string;
-  name: string;
-  decimals: number;
-  icon: string;
-  logoURI: string;
-  chainAgnosticId: string | null;
-}
+import { TokenInfo } from ".";
 
 interface GasFees {
   gasAmount: string;
@@ -105,4 +96,4 @@ interface RouteResponse {
   result: Result;
 }
 
-export { type RouteResponse, type Result, type Route };
+export { type RouteResponse, type Result, type Route, type Step };

@@ -29,6 +29,7 @@ const MOST_VALUED_TOKENS = [
   "LUSD Stablecoin",
   "Decentraland",
   "Polygon",
+  "Matic",
   "MCDEX Token",
   "MAGIC INTERNET MONEY",
   "Maker",

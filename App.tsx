@@ -49,7 +49,7 @@ export default function App() {
         <WagmiConfig config={wagmiConfig}>
           <PortalProvider>
             <SafeAreaProvider>
-              <StatusBar barStyle={"dark-content"} />
+              <StatusBar barStyle={"light-content"} />
               <Navigation />
             </SafeAreaProvider>
             <Web3Modal />

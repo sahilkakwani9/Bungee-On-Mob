@@ -70,7 +70,7 @@ const Bridge = ({ navigation }: RootTabScreenProps<"Bridge">) => {
         selectedSendingToken?.address!,
         selectedReceivingChain?.chainId!,
         selectedReceivingToken?.address!,
-        "1000000000000000000",
+        "10000000000000000000",
         address!,
         sortCriteria.OUTPUT
       );

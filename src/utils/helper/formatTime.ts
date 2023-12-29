@@ -1,4 +1,7 @@
 function formatTime(seconds: number): string {
+  if (!seconds) {
+    return "";
+  }
   if (seconds < 60) {
     return `${seconds} second${seconds !== 1 ? "s" : ""}`;
   } else if (seconds < 3600) {

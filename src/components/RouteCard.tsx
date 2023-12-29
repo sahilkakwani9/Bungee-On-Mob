@@ -2,35 +2,53 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colors from "../utils/colors";
 import formatTime from "../utils/helper/formatTime";
-import { Route, Step } from "../types/socket/route";
+import { CrossChainRoute, SameChainRoute } from "../types/socket/route";
 
-const RouteCard = ({ item }: { item: Route }) => {
-  const getBridgeLogo = () => {
-    const bridgeStep = item.userTxs[0].steps?.filter((step) => {
-      return step.type == "bridge";
-    });
-    return bridgeStep[0]?.protocol?.icon;
+const RouteCard = ({ item }: { item: CrossChainRoute | SameChainRoute }) => {
+  const getProtocolLogo = () => {
+    if ("userTxs" in item && item.userTxs[0].steps) {
+      const bridgeStep = item.userTxs[0]?.steps.filter((step) => {
+        return step.type === "bridge";
+      });
+      return bridgeStep[0]?.protocol?.icon;
+    }
+    return item.userTxs[0]?.protocol?.icon;
+  };
+
+  const getProtocolName = () => {
+    if ("userTxs" in item && item.userTxs[0].steps) {
+      return item.usedBridgeNames[0];
+    }
+    return item.usedDexName;
   };
 
   const getReceivedAmount = () => {
     const receivedAmount =
       parseInt(item.toAmount) / 10 ** item.userTxs[0].toAsset.decimals;
-    return `${receivedAmount.toFixed(3)} ${item.userTxs[0].toAsset.symbol}`;
+    let decimals = 3; // Default number of decimals
+
+    if (Math.abs(receivedAmount) >= 1000) {
+      decimals = 0;
+    } else if (Math.abs(receivedAmount) >= 1) {
+      decimals = 2;
+    }
+
+    return `${receivedAmount.toFixed(decimals)} ${
+      item.userTxs[0].toAsset.symbol
+    }`;
   };
   return (
     <View style={styles.container}>
       <View style={styles.bridgeContainer}>
         <Image
           source={{
-            uri: getBridgeLogo(),
+            uri: getProtocolLogo(),
           }}
           style={styles.bridgeIcon}
         />
         <View style={styles.bridgeTxtContainer}>
-          <Text style={styles.bridgeName}>{item.usedBridgeNames[0]}</Text>
-          <Text style={styles.bridgeTime}>
-            {formatTime(item.maxServiceTime)}
-          </Text>
+          <Text style={styles.bridgeName}>{getProtocolName()}</Text>
+          <Text style={styles.bridgeTime}>{formatTime(item.serviceTime)}</Text>
         </View>
       </View>
       <View style={styles.outputContainer}>

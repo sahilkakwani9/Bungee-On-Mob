@@ -13,6 +13,22 @@ async function getRoutes(
   sortCriteria: sortCriteria
 ): Promise<RouteResponse> {
   try {
+    console.log(
+      fromChainId,
+      ":",
+      fromTokenAddress,
+      ":",
+      toChainId,
+      ":",
+      toTokenAddress,
+      ":",
+      amount,
+      ":",
+      userAddress,
+      ":",
+      sortCriteria
+    );
+
     const response = await fetch(
       `${SOCKET_API_URL}/quote?fromChainId=${fromChainId}&fromTokenAddress=${fromTokenAddress}&toChainId=${toChainId}&toTokenAddress=${toTokenAddress}&fromAmount=${amount}&userAddress=${userAddress}&uniqueRoutesPerBridge=true&sort=${sortCriteria}&singleTxOnly=true`,
       {
@@ -31,6 +47,7 @@ async function getRoutes(
     }
 
     const data: RouteResponse = await response.json();
+    console.log("got the routes", data);
 
     return data;
   } catch (error) {

@@ -26,7 +26,34 @@ interface Step {
   gasFees: GasFees;
 }
 
-interface UserTx {
+interface SameChainUserTx {
+  userTxType: string;
+  txType: string;
+  swapSlippage: number;
+  chainId: number;
+  protocol: {
+    name: string;
+    displayName: string;
+    icon: string;
+  };
+  fromAsset: TokenInfo;
+  approvalData: null | {
+    minimumApprovalAmount: string;
+    approvalTokenAddress: string;
+    allowanceTarget: string;
+    owner: string;
+  };
+  fromAmount: string;
+  toAsset: TokenInfo;
+  toAmount: string;
+  minAmountOut: string;
+  gasFees: GasFees;
+  sender: string;
+  recipient: string;
+  userTxIndex: number;
+}
+
+interface CrossChainUserTx {
   userTxType: string;
   txType: string;
   chainId: number;
@@ -55,7 +82,7 @@ interface BridgeRouteError {
   maxAmount?: string;
 }
 
-interface Route {
+interface CrossChainRoute {
   routeId: string;
   isOnlySwapRoute: boolean;
   fromAmount: string;
@@ -73,15 +100,32 @@ interface Route {
   receivedValueInUsd: number;
   inputValueInUsd: number;
   outputValueInUsd: number;
-  userTxs: UserTx[];
+  userTxs: CrossChainUserTx[];
   serviceTime: number;
   maxServiceTime: number;
   integratorFee: IntegratorFee;
   extraData: Record<string, any>;
 }
 
-interface Result {
-  routes: Route[];
+interface SameChainRoute {
+  routeId: string;
+  isOnlySwapRoute: boolean;
+  fromAmount: string;
+  toAmount: string;
+  sender: string;
+  recipient: string;
+  totalUserTx: number;
+  totalGasFeesInUsd: number;
+  userTxs: SameChainUserTx[];
+  usedDexName: string;
+  integratorFee: IntegratorFee;
+  outputValueInUsd: number;
+  receivedValueInUsd: number;
+  inputValueInUsd: number;
+}
+
+interface CrossChainSwapResult {
+  routes: CrossChainRoute[];
   socketRoute: null;
   destinationCallData: Record<string, any>;
   fromChainId: number;
@@ -91,9 +135,24 @@ interface Result {
   bridgeRouteErrors: Record<string, BridgeRouteError>;
 }
 
-interface RouteResponse {
-  success: boolean;
-  result: Result;
+interface SameChainSwapResult {
+  routes: SameChainRoute[];
+  fromChainId: number;
+  fromAsset: TokenInfo;
+  toChainId: number;
+  toAsset: TokenInfo;
 }
 
-export { type RouteResponse, type Result, type Route, type Step };
+interface RouteResponse {
+  success: boolean;
+  result: SameChainSwapResult | CrossChainSwapResult;
+}
+
+export {
+  type RouteResponse,
+  type SameChainSwapResult,
+  type CrossChainSwapResult,
+  type SameChainRoute,
+  type CrossChainRoute,
+  type Step,
+};

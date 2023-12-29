@@ -1,15 +1,12 @@
 import {
   ActivityIndicator,
-  Alert,
   Image,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { useAccount } from "wagmi";
 import colors from "../utils/colors";
 import { useConfigStore } from "../store/ConfigStore";
@@ -23,7 +20,6 @@ import ReceivingTokenSheet from "../components/sheets/ReceivingTokenSheet";
 import fetchTokenLists from "../utils/helper/fetchTokenLists";
 import getRoutes from "../utils/helper/getRoutes";
 import { sortCriteria } from "../types/socket";
-import RouteCard from "../components/RouteCard";
 import { RootTabScreenProps } from "../types/navigation";
 
 const Bridge = ({ navigation }: RootTabScreenProps<"Bridge">) => {
@@ -50,15 +46,19 @@ const Bridge = ({ navigation }: RootTabScreenProps<"Bridge">) => {
   const sendTokenSheetRef = React.useRef<BottomSheetMethods>(null);
   const receiveTokenSheetRef = React.useRef<BottomSheetMethods>(null);
   const [routesLoading, setRoutesLoading] = React.useState(false);
+
   const openSendingSheet = () => {
     sendChainSheetRef.current?.snapToIndex(0);
   };
+
   const openReceivingSheet = () => {
     receivingChainSheetRef.current?.snapToIndex(0);
   };
+
   const openSendTokenSheet = () => {
     sendTokenSheetRef.current?.snapToIndex(0);
   };
+
   const openReceiveTokenSheet = () => {
     receiveTokenSheetRef.current?.snapToIndex(0);
   };

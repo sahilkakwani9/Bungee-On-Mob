@@ -48,10 +48,19 @@ enum sortCriteria {
   GAS = "gas",
 }
 
+interface checkAllowanceResult {
+  success: true;
+  result: {
+    value: string;
+    tokenAddress: string;
+  };
+}
+
 export {
   type ChainInfo,
   type SupportedChainResult,
   type TokenResult,
   type TokenInfo,
+  type checkAllowanceResult,
   sortCriteria,
 };

@@ -2,12 +2,14 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import RouteCard from "../components/RouteCard";
 import { RootStackScreenProps } from "../types/navigation";
-import { Route } from "../types/socket/route";
+import { CrossChainRoute, SameChainRoute } from "../types/socket/route";
+import { useConfigStore } from "../store/ConfigStore";
 
 const Routes = ({ navigation, route }: RootStackScreenProps<"Routes">) => {
   const { routes } = route.params;
-  const renderItem = ({ item }: { item: Route }) => {
-    return <RouteCard item={item} />;
+  const { selectedRoute } = useConfigStore();
+  const renderItem = ({ item }: { item: CrossChainRoute | SameChainRoute }) => {
+    return <RouteCard item={item} isActive={item === selectedRoute} />;
   };
 
   return (

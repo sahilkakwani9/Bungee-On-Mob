@@ -1,4 +1,5 @@
 import { ChainInfo, TokenInfo } from "../socket";
+import { CrossChainRoute, SameChainRoute } from "../socket/route";
 export type IConfigStore = {
   supportedChains: null | ChainInfo[];
   sendingChains: null | ChainInfo[];
@@ -10,6 +11,7 @@ export type IConfigStore = {
   selectedSendingToken: TokenInfo | null;
   selectedReceivingToken: TokenInfo | null;
   tokensLoading: boolean;
+  selectedRoute: CrossChainRoute | SameChainRoute | null;
   setSupportedChains: (chains: ChainInfo[]) => void;
   setSendingChains: (chains: ChainInfo[]) => void;
   setReceivingChains: (chains: ChainInfo[]) => void;
@@ -19,5 +21,6 @@ export type IConfigStore = {
   setReceivingTokens: (tokens: TokenInfo[]) => void;
   setSelectedSendingToken: (chain: TokenInfo) => void;
   setSelectedReceivingToken: (chain: TokenInfo) => void;
+  setSelectedRoute: (route: SameChainRoute | CrossChainRoute) => void;
   setTokensLoading: (value: boolean) => void;
 };

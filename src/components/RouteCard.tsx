@@ -3,10 +3,19 @@ import React from "react";
 import colors from "../utils/colors";
 import formatTime from "../utils/helper/formatTime";
 import { CrossChainRoute, SameChainRoute } from "../types/socket/route";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useConfigStore } from "../store/ConfigStore";
 
-const RouteCard = ({ item }: { item: CrossChainRoute | SameChainRoute }) => {
+const RouteCard = ({
+  item,
+  isActive,
+}: {
+  item: CrossChainRoute | SameChainRoute;
+  isActive: boolean;
+}) => {
+  const { setSelectedRoute } = useConfigStore();
   const getProtocolLogo = () => {
-    if ("userTxs" in item && item.userTxs[0].steps) {
+    if ("userTxs" in item && item.userTxs[0]?.steps) {
       const bridgeStep = item.userTxs[0]?.steps.filter((step) => {
         return step.type === "bridge";
       });
@@ -37,8 +46,18 @@ const RouteCard = ({ item }: { item: CrossChainRoute | SameChainRoute }) => {
       item.userTxs[0].toAsset.symbol
     }`;
   };
+
+  const onPressRoute = () => {
+    setSelectedRoute(item);
+  };
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        isActive ? styles.activeBorder : styles.inactiveBorder,
+      ]}
+      onPress={onPressRoute}
+    >
       <View style={styles.bridgeContainer}>
         <Image
           source={{
@@ -63,7 +82,7 @@ const RouteCard = ({ item }: { item: CrossChainRoute | SameChainRoute }) => {
           )}`}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -72,7 +91,6 @@ export default RouteCard;
 const styles = StyleSheet.create({
   container: {
     borderWidth: 2,
-    borderColor: colors.border,
     padding: 8,
     flexDirection: "column",
     gap: 4,
@@ -133,5 +151,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     color: colors.foreground,
+  },
+  activeBorder: {
+    borderColor: colors.border,
+  },
+  inactiveBorder: {
+    borderColor: colors.foreground,
   },
 });

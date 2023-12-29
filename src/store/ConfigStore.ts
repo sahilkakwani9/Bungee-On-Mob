@@ -11,6 +11,7 @@ export const useConfigStore = create<IConfigStore>((set, get) => ({
   receivingTokens: null,
   selectedSendingToken: null,
   selectedReceivingToken: null,
+  selectedRoute: null,
   tokensLoading: true,
   setSupportedChains: (chains) => {
     set({ supportedChains: chains });
@@ -38,6 +39,9 @@ export const useConfigStore = create<IConfigStore>((set, get) => ({
   },
   setSelectedReceivingToken: (selectedToken) => {
     set({ selectedReceivingToken: selectedToken });
+  },
+  setSelectedRoute: (route) => {
+    set({ selectedRoute: route });
   },
   setTokensLoading: (value) => {
     set({ tokensLoading: value });

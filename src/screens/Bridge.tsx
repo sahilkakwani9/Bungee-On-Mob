@@ -43,6 +43,7 @@ const Bridge = ({ navigation }: RootTabScreenProps<"Bridge">) => {
     setReceivingTokens,
     setSelectedSendingToken,
     setSelectedReceivingToken,
+    setSelectedRoute,
   } = useConfigStore();
   const sendChainSheetRef = React.useRef<BottomSheetMethods>(null);
   const receivingChainSheetRef = React.useRef<BottomSheetMethods>(null);
@@ -74,6 +75,7 @@ const Bridge = ({ navigation }: RootTabScreenProps<"Bridge">) => {
         address!,
         sortCriteria.OUTPUT
       );
+      setSelectedRoute(routes.result.routes[0]);
       setRoutesLoading(false);
       navigation.navigate("Routes", { routes });
     } catch (error) {}

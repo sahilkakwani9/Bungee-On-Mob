@@ -15,20 +15,24 @@ const RouteCard = ({
 }) => {
   const { setSelectedRoute } = useConfigStore();
   const getProtocolLogo = () => {
-    if ("userTxs" in item && item.userTxs[0]?.steps) {
+    if ("steps" in item.userTxs[0] && item.userTxs[0]?.steps) {
       const bridgeStep = item.userTxs[0]?.steps.filter((step) => {
         return step.type === "bridge";
       });
       return bridgeStep[0]?.protocol?.icon;
+    } else if (
+      "protocol" in item.userTxs[0] &&
+      item.userTxs[0]?.protocol?.icon
+    ) {
+      return item.userTxs[0]?.protocol?.icon;
     }
-    return item.userTxs[0]?.protocol?.icon;
   };
 
   const getProtocolName = () => {
-    if ("userTxs" in item && item.userTxs[0].steps) {
+    if ("usedBridgeNames" in item && item.usedBridgeNames) {
       return item.usedBridgeNames[0];
-    }
-    return item.usedDexName;
+    } else if ("usedDexName" in item && item.usedDexName)
+      return item.usedDexName;
   };
 
   const getReceivedAmount = () => {
@@ -67,7 +71,9 @@ const RouteCard = ({
         />
         <View style={styles.bridgeTxtContainer}>
           <Text style={styles.bridgeName}>{getProtocolName()}</Text>
-          <Text style={styles.bridgeTime}>{formatTime(item.serviceTime)}</Text>
+          <Text style={styles.bridgeTime}>
+            {"serviceTime" in item ? formatTime(item?.serviceTime) : ""}
+          </Text>
         </View>
       </View>
       <View style={styles.outputContainer}>
